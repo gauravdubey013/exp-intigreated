@@ -55,8 +55,7 @@
 }
 .loginPage .contanier .videoDiv .footerDiv,
 .registerPage .contanier .videoDiv .footerDiv {
-  @apply h-[60px] justify-between backdrop-blur-[1px] px-4 py-0 rounded-[10px] bottom-2.5 inset-x-2.5;
-  background: rgba(255, 255, 255, 0.248);
+  @apply h-[60px] justify-between backdrop-blur-[1px] bg-[#00000052] dark:bg-[#FFFFFF3F] px-4 py-0 rounded-[10px] bottom-2.5 inset-x-2.5;
   -webkit-backdrop-filter: blur(1px);
 }
 .loginPage .contanier .videoDiv .footerDiv .text,
@@ -81,7 +80,7 @@
 }
 .loginPage .contanier .fromDiv,
 .registerPage .contanier .fromDiv {
-  @apply basis-6/12 h-[100%] flex-col gap-6 translate-y-[-1rem] m-auto;
+  @apply basis-6/12 h-[100%] flex flex-col gap-6 translate-y-[-1rem] m-auto;
 }
 .loginPage .contanier .fromDiv .headerDiv,
 .registerPage .contanier .fromDiv .headerDiv {

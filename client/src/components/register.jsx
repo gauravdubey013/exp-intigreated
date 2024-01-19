@@ -164,7 +164,7 @@ const Register = () => {
             </div>
           </div>
 
-          <div className="fromDiv scrollDi">
+          <div className="fromDiv">
             <div className="headerDiv flex flex-col items-center justify-center overflow-hidden">
               <img src={LogoDark} alt="Logo" className="logo-dark" />
               <img src={LogoLight} alt="Logo" className="logo-light" />
@@ -172,7 +172,7 @@ const Register = () => {
               <h3 className="lineH3">Let us Know about you!!</h3>
             </div>
 
-            <form onSubmit={register} className="form">
+            <form onSubmit={register} className="form scrollDi">
               <div className="inputDiv">
                 <label htmlFor="name">Name</label>
                 <div className="input flexDiv">

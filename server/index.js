@@ -3,7 +3,11 @@ import cors from "cors";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-// import { Resend } from "resend";
+
+import multer from "multer";
+import { promisify } from "util";
+import { writeFile } from "fs/promises";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -19,8 +23,8 @@ app.use(cors());
 // }
 
 mongoose.connect(
-  process.env.MONGO_URL,
-  // "mongodb+srv://exp:exp@expcluster.r3892ua.mongodb.net/expdb?retryWrites=true&w=majority",
+  // process.env.MONGO_URL,
+  "mongodb+srv://exp:exp12345@clusterexp.xw5sehz.mongodb.net/expdb?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -166,6 +170,64 @@ app.post("/reset-password/:id/:token", async (req, res) => {
       return res.send({ error: error });
     }
   });
+});
+
+const uploadImg = new mongoose.Schema(
+  {
+    email: {
+      unique: true,
+      type: String,
+      required: true,
+    },
+    imgPath: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+const UploadImg = new mongoose.model("UploadImg", uploadImg);
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post("/upload", upload.single("profileImg"), async (req, res) => {
+  // const data = await req.formData();
+
+  try {
+    const email = req.body.email;
+    const profileImg = req.file;
+
+    let profileImgPath = "";
+
+    const user = await UploadImg.findOne({ email: email });
+    if (user) {
+      return res.send({ message: "Use another email", user: user });
+    }
+
+    if (profileImg) {
+      const bufferProfile = profileImg.buffer;
+      const profileImgPathPublic = `../client/public/users/profiles/${
+        email + "_" + profileImg.originalname
+      }`;
+      await writeFile(profileImgPathPublic, bufferProfile);
+      profileImgPath = `/users/profiles/${
+        email + "_" + profileImg.originalname
+      }`;
+    } else {
+      profileImgPath = "noProfile";
+    }
+
+    const uploadImgData = new UploadImg({
+      email,
+      imgPath: profileImgPath,
+    });
+    await uploadImgData.save();
+
+    res.send({ message: "Uploaded img successfully" });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.listen(3001, () => {
